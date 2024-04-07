@@ -35,11 +35,11 @@ public class BackEndDayOffApplication {
                 if (i == 0) email = "user_manager@gmail.com";
                 else if (i == 1) email = "user_admin@gmail.com";
                 else email = "user%s@gmail.com".formatted(i);
-                var role = -1;
+                User.Role role;
 
-                if (i == 0) role = 1;
-                else if (i == 1) role = 2;
-                else role = 3;
+                if (i == 0) role = User.Role.MANAGER;
+                else if (i == 1) role = User.Role.ADMIN;
+                else role = User.Role.USER;
 
                 var user = User.builder()
                         .email(email)
@@ -48,6 +48,7 @@ public class BackEndDayOffApplication {
                         .address(address[i])
                         .birthDate(LocalDateTime.now().minusYears(25))
                         .workDate(LocalDateTime.now())
+                        .phone("123456789")
                         .role(role)
                         .department(department)
                         .build();
@@ -72,6 +73,7 @@ public class BackEndDayOffApplication {
                     leaveRequest.setStartDate(LocalDateTime.of(2024, 4, 7, 0, 0));
                     leaveRequest.setEndDate(LocalDateTime.of(2024, 4, 8, 23, 59));
                     leaveRequest.setReason("Sick");
+                    leaveRequest.setCreatedAt(LocalDateTime.now());
                     leaveRequest.setStatus(0);
                     leaveRequestRepository.saveAndFlush(leaveRequest);
                 }

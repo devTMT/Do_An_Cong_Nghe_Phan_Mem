@@ -1,7 +1,7 @@
 package com.masterspring.backenddayoff.controller;
 
 import com.masterspring.backenddayoff.dto.request.AuthRequest;
-import com.masterspring.backenddayoff.entity.User;
+import com.masterspring.backenddayoff.dto.response.AuthResponse;
 import com.masterspring.backenddayoff.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,8 +21,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@Valid @RequestBody AuthRequest authRequest) {
-        var loggedUser = authService.login(authRequest);
-        return new ResponseEntity<>(loggedUser, HttpStatus.OK);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest) {
+        var authResponse = authService.login(authRequest);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 }

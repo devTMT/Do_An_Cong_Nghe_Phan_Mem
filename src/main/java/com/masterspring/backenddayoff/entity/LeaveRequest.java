@@ -26,6 +26,8 @@ public class LeaveRequest {
 
     private Integer status;
 
+    private LocalDateTime createdAt;
+
     @ManyToOne
     private User user;
 }

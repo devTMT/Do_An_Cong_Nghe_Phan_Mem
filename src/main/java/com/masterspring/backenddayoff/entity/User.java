@@ -17,6 +17,10 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
+    public enum Role {
+        MANAGER, ADMIN, USER
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +38,10 @@ public class User {
 
     private String address;
 
-    private Integer role;
+    private String phone;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @ManyToOne
     private Department department;

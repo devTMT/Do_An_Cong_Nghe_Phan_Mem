@@ -1,4 +1,4 @@
-package com.masterspring.backenddayoff.dto.request;
+package com.masterspring.backenddayoff.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +8,18 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class LeaveRequest {
-    private Long userId;
+public class LeaveRequestPostResponse {
+    private Long id;
+
     private LocalDate startDate;
+
     private LocalDate endDate;
+
     private LocalDateTime createdAt;
+
+    private Long createdBy;
+
     private String reason;
+
+    private Integer status;
 }

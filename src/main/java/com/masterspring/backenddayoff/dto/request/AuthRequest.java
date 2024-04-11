@@ -6,9 +6,9 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 public class AuthRequest {
-    @Email
+    @Email(message = "Invalid email format.")
     private String email;
 
-    @Length(min = 8)
+    @Length(min = 8, message = "Password length must be at least 8 characters.")
     private String password;
 }

@@ -43,5 +43,6 @@ public class LeaveRequest {
     private LocalDateTime createdAt;
 
     @ManyToOne
+    @JoinColumn(name = "`user_id`")
     private User user;
 }

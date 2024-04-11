@@ -1,13 +1,15 @@
 package com.masterspring.backenddayoff.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
+@Data
+@Builder
 @Entity
 @Table(name = "`departments`")
 public class Department {
@@ -17,6 +19,6 @@ public class Department {
     @Column(name = "`id`")
     private Long id;
 
-    @Column(name = "`name`")
+    @Column(name = "`name`", unique = true, nullable = false)
     private String name;
 }

@@ -1,4 +1,4 @@
-Run: `java -jar back-end-day-off-0.0.1-SNAPSHOT.jar`
+Run: `java -jar back-end-day-off-0.0.1-SNAPSHOT.jar` (Java 21)
 
 Database console: http://localhost:8080/h2-console
 

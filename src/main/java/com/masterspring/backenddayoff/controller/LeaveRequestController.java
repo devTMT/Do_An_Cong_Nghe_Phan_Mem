@@ -1,31 +1,33 @@
 package com.masterspring.backenddayoff.controller;
 
-import com.masterspring.backenddayoff.dto.response.LeaveResponse;
-import com.masterspring.backenddayoff.repository.LeaveRequestRepository;
-import com.masterspring.backenddayoff.service.impl.LeaveServiceImpl;
-import org.springframework.http.HttpStatus;
+import com.masterspring.backenddayoff.dto.LeaveRequestStatusDto;
+import com.masterspring.backenddayoff.dto.response.LeaveRequestPaginationResponse;
+import com.masterspring.backenddayoff.service.LeaveRequestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/leave")
+@RequestMapping("/leave_request/")
 public class LeaveRequestController {
+    private LeaveRequestService leaveRequestService;
 
-    private final LeaveRequestRepository leaveRequestRepository;
-    private final LeaveServiceImpl leaveServiceImpl;
-
-    public LeaveRequestController(LeaveRequestRepository leaveRequestRepository, LeaveServiceImpl leaveServiceImpl) {
-        this.leaveRequestRepository = leaveRequestRepository;
-        this.leaveServiceImpl = leaveServiceImpl;
+    @Autowired
+    public LeaveRequestController(LeaveRequestService leaveRequestService) {
+        this.leaveRequestService = leaveRequestService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<LeaveResponse>> getLeaveHistory() {
-        var leaveHistory = leaveServiceImpl.getAllLeaveRequests();
-        return new ResponseEntity<>(leaveHistory, HttpStatus.OK);
+    @PutMapping("update_status/{id}")
+    public ResponseEntity<LeaveRequestStatusDto> updateStatus(
+            @PathVariable("id") long id,
+            @RequestBody LeaveRequestStatusDto leaveRequestDto) {
+        return ResponseEntity.ok(leaveRequestService.confirmLeaveRequest(id, leaveRequestDto));
+    }
+
+    @GetMapping("pagination_manager")
+    public ResponseEntity<LeaveRequestPaginationResponse> getLeaveRequestsWithManagerId(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize){
+        return ResponseEntity.ok(leaveRequestService.getPageLeaveRequestsWithManagerId(pageNo, pageSize));
     }
 }

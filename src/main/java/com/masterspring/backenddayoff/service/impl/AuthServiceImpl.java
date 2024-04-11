@@ -5,6 +5,8 @@ import com.masterspring.backenddayoff.dto.response.AuthResponse;
 import com.masterspring.backenddayoff.exception.AppException;
 import com.masterspring.backenddayoff.repository.UserRepository;
 import com.masterspring.backenddayoff.service.AuthService;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

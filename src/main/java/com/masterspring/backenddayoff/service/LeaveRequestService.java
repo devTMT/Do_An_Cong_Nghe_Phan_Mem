@@ -2,11 +2,14 @@ package com.masterspring.backenddayoff.service;
 
 import com.masterspring.backenddayoff.dto.LeaveRequestStatusDto;
 import com.masterspring.backenddayoff.dto.request.LeaveRequestPost;
+import com.masterspring.backenddayoff.dto.response.LeaveRequestHistoryResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestPaginationResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestPostResponse;
 
 public interface LeaveRequestService {
     LeaveRequestPostResponse postLeaveRequest(LeaveRequestPost leaveRequestPost);
+
+    LeaveRequestHistoryResponse getLeaveRequestHistory(Long userId);
 
     LeaveRequestStatusDto confirmLeaveRequest(Long id, LeaveRequestStatusDto leaveRequestDto);
 

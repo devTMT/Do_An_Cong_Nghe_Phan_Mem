@@ -23,7 +23,10 @@ User login.
   "phone": "0123456789",
   "address": "address",
   "role": 0,
-  "department": "IT",
+  "department": {
+    "id": 0,
+    "name": "IT"
+  },
   "remainDays": 9
 }
 ```

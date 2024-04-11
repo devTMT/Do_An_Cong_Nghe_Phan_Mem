@@ -1,22 +1,89 @@
-# Getting Started
+`POST /api/v1/auth/login`
 
-### Reference Documentation
+User login.
 
-For further reference, please consider the following sections:
+**Request Body**
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.2.4/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.2.4/maven-plugin/reference/html/#build-image)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/3.2.4/reference/htmlsingle/index.html#data.sql.jpa-and-spring-data)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/3.2.4/reference/htmlsingle/index.html#web)
+```json
+{
+  "email": "email",
+  "password": "password"
+}
+```
 
-### Guides
+**Response**
 
-The following guides illustrate how to use some features concretely:
+```json
+{
+  "id": 1,
+  "email": "email",
+  "fullName": "fullName",
+  "birthdate": "1999-11-10",
+  "workDate": "2023-03-06",
+  "phone": "0123456789",
+  "address": "address",
+  "role": 0,
+  "department": "IT",
+  "remainDays": 9
+}
+```
 
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
-* [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
+`GET /api/v1/leave_request/pagination_manager`
 
+Get all leave requests.
+
+**Response**
+
+```json
+{
+  "content": [
+    {
+      "startDate": "2023-03-06",
+      "endDate": "2023-03-06",
+      "reason": "Sick",
+      "status": 2,
+      "createdAt": "2023-03-06",
+      "username": "username",
+      "manager": "manager name"
+    },
+    {
+      "startDate": "2023-03-06",
+      "endDate": "2023-03-06",
+      "reason": "Sick",
+      "status": 2,
+      "createdAt": "2023-03-06",
+      "username": "username",
+      "manager": "manager name"
+    }
+  ],
+  "pageNo": 1,
+  "pageSize": 5,
+  "totalElements": 20,
+  "totalPages": 2,
+  "last": false
+}
+```
+
+`PUT /api/v1/leave_request/update_status/{id}`
+
+Update leave request status.
+
+**Request Body**
+
+```json
+{
+  "id": 1,
+  "status": 0,
+  "manager": 0
+}
+```
+
+**Response**
+
+```json
+{
+  "id": 1,
+  "status": 0,
+  "manager": 0
+}
+```

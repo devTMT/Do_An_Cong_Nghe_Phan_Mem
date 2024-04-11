@@ -1,9 +1,11 @@
 package com.masterspring.backenddayoff.dto.response;
 
 import com.masterspring.backenddayoff.entity.Department;
+import com.masterspring.backenddayoff.entity.User;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,15 +18,15 @@ public class AuthResponse {
 
     private String fullName;
 
-    private LocalDateTime birthDate;
+    private LocalDate birthdate;
 
-    private LocalDateTime workDate;
+    private LocalDate workDate;
 
     private String phone;
 
     private String address;
 
-    private String role;
+    private Integer role;
 
     private Department department;
 

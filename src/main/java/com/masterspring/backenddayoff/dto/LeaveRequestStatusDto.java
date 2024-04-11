@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class LeaveRequestStatusDto {
     private long id;
-    private String status;
+    private Integer status;
     private long manager_id;
 }

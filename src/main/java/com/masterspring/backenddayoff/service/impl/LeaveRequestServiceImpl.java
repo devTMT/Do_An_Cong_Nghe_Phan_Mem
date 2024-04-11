@@ -51,6 +51,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         response.setPageSize(leaveRequestPage.getSize());
         response.setTotalElements(leaveRequestPage.getTotalElements());
         response.setTotalPages(leaveRequestPage.getTotalPages());
+        response.setLast(leaveRequestPage.isLast());
         return response;
     }
 
@@ -65,6 +66,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         response.setPageSize(leaveRequestPage.getSize());
         response.setTotalElements(leaveRequestPage.getTotalElements());
         response.setTotalPages(leaveRequestPage.getTotalPages());
+        response.setLast(leaveRequestPage.isLast());
         return response;
     }
 
@@ -80,6 +82,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         response.setPageSize(leaveRequestPage.getSize());
         response.setTotalElements(leaveRequestPage.getTotalElements());
         response.setTotalPages(leaveRequestPage.getTotalPages());
+        response.setLast(leaveRequestPage.isLast());
         return response;
     }
 

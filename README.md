@@ -1,6 +1,6 @@
 ### Database Schema
 
-![Database schema](screenshots\schema.png)
+<img src="./screenshots/schema.png" width="1465" alt="">
 
 `role`
 

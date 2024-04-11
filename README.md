@@ -1,3 +1,12 @@
+Run: `java -jar back-end-day-off-0.0.1-SNAPSHOT.jar`
+
+Database console: http://localhost:8080/h2-console
+
+- Driver Class: `org.h2.Driver`
+- JDBC URL: `jdbc:h2:mem:dacnpm`
+- User Name: `sa`
+- Password:
+
 ### Database Schema
 
 <img src="./screenshots/schema.png" width="1465" alt="">

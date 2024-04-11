@@ -2,11 +2,13 @@ package com.masterspring.backenddayoff.service.impl;
 
 import com.masterspring.backenddayoff.dto.LeaveRequestStatusDto;
 import com.masterspring.backenddayoff.dto.request.LeaveRequestPost;
+import com.masterspring.backenddayoff.dto.response.LeaveRequestHistoryResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestPaginationResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestPostResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestResponse;
 import com.masterspring.backenddayoff.entity.LeaveRequest;
 import com.masterspring.backenddayoff.exception.AppException;
+import com.masterspring.backenddayoff.mapper.LeaveRequestHistoryMapper;
 import com.masterspring.backenddayoff.mapper.LeaveRequestPostMapper;
 import com.masterspring.backenddayoff.repository.LeaveRemainRepository;
 import com.masterspring.backenddayoff.repository.LeaveRequestRepository;
@@ -30,14 +32,16 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     private final UserRepository userRepository;
     private final LeaveRequestPostMapper leaveRequestPostMapper;
     private final LeaveRemainRepository leaveRemainRepository;
+    private final LeaveRequestHistoryMapper leaveRequestHistoryMapper;
 
     @Autowired
     public LeaveRequestServiceImpl(LeaveRequestRepository leaveRequestRepository, UserRepository userRepository, LeaveRequestPostMapper leaveRequestPostMapper,
-                                   LeaveRemainRepository leaveRemainRepository) {
+                                   LeaveRemainRepository leaveRemainRepository, LeaveRequestHistoryMapper leaveRequestHistoryMapper) {
         this.leaveRequestRepository = leaveRequestRepository;
         this.userRepository = userRepository;
         this.leaveRequestPostMapper = leaveRequestPostMapper;
         this.leaveRemainRepository = leaveRemainRepository;
+        this.leaveRequestHistoryMapper = leaveRequestHistoryMapper;
     }
 
     @Override
@@ -69,6 +73,21 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 
         // Return response to client.
         return leaveRequestPostMapper.leaveRequestToLeaveRequestPostResponse(leaveRequest);
+    }
+
+    @Override
+    public LeaveRequestHistoryResponse getLeaveRequestHistory(Long userId) {
+        // If user not exist then throw error.
+        var user = userRepository.findById(userId);
+        if (user.isEmpty()) throw new AppException(400, "User not found.");
+
+        // Fetch all leave requests and map to response.
+        var leaveRequests = leaveRequestRepository.findByUserId(userId);
+        var leaveRequestHistoryResponse = new LeaveRequestHistoryResponse();
+        leaveRequestHistoryResponse.setUserId(userId);
+        leaveRequestHistoryResponse.setLeaveRequests(leaveRequests.stream().map(leaveRequestHistoryMapper::fromleaveRequest).toList());
+
+        return leaveRequestHistoryResponse;
     }
 
     @Override

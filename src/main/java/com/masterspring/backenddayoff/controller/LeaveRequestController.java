@@ -2,6 +2,7 @@ package com.masterspring.backenddayoff.controller;
 
 import com.masterspring.backenddayoff.dto.LeaveRequestStatusDto;
 import com.masterspring.backenddayoff.dto.request.LeaveRequestPost;
+import com.masterspring.backenddayoff.dto.response.LeaveRequestHistoryResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestPaginationResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestPostResponse;
 import com.masterspring.backenddayoff.service.LeaveRequestService;
@@ -24,6 +25,11 @@ public class LeaveRequestController {
     @PostMapping
     public ResponseEntity<LeaveRequestPostResponse> postLeaveRequest(@Valid @RequestBody LeaveRequestPost leaveRequestPost) {
         return new ResponseEntity<>(leaveRequestService.postLeaveRequest(leaveRequestPost), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<LeaveRequestHistoryResponse> getLeaveRequestHistory(@PathVariable Long userId) {
+        return new ResponseEntity<>(leaveRequestService.getLeaveRequestHistory(userId), HttpStatus.OK);
     }
 
     @PutMapping("/update_status/{id}")

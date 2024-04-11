@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class LeaveHistory {
+public class LeaveResponse {
     private Long id;
     private LocalDateTime date;
-    private String status;
+    private Integer status;
     private String reason;
 }

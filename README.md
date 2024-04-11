@@ -16,6 +16,8 @@
 
 ### API
 
+#### For user
+
 `POST /api/v1/auth/login`
 
 User login.
@@ -127,7 +129,7 @@ Post leave request.
 }
 ```
 
----
+#### For admin
 
 `GET /api/v1/leave_request/pagination`
 

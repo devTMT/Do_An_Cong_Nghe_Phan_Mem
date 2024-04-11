@@ -68,6 +68,21 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         return response;
     }
 
+    @Override
+    public LeaveRequestPaginationResponse getPageLeaveRequestsBySearch(String keyword, Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<LeaveRequest> leaveRequestPage = leaveRequestRepository.findAllByUserFullNameContainingIgnoreCaseOrReasonContainingIgnoreCase(keyword, keyword, pageable);
+        List<LeaveRequestResponse> content = leaveRequestPage.getContent().stream().map(this::mapToResponse).collect(Collectors.toList());
+
+        LeaveRequestPaginationResponse response = new LeaveRequestPaginationResponse();
+        response.setContent(content);
+        response.setPageNo(leaveRequestPage.getNumber());
+        response.setPageSize(leaveRequestPage.getSize());
+        response.setTotalElements(leaveRequestPage.getTotalElements());
+        response.setTotalPages(leaveRequestPage.getTotalPages());
+        return response;
+    }
+
     public LeaveRequestResponse mapToResponse(LeaveRequest leaveRequest) {
         LeaveRequestResponse leaveRequestResponse = new LeaveRequestResponse();
         leaveRequestResponse.setId(leaveRequest.getId());

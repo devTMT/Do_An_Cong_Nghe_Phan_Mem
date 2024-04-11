@@ -7,4 +7,6 @@ public interface LeaveRequestService {
     LeaveRequestStatusDto confirmLeaveRequest(Long id, LeaveRequestStatusDto leaveRequestDto);
     LeaveRequestPaginationResponse getPageLeaveRequests(int pageNo, int pageSize);
     LeaveRequestPaginationResponse getPageLeaveRequestsWithUserId(Long userId, Integer pageNo, Integer pageSize);
+    LeaveRequestPaginationResponse getPageLeaveRequestsBySearch(String keyword, Integer pageNo, Integer pageSize);
+
 }

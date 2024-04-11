@@ -7,14 +7,14 @@ import com.masterspring.backenddayoff.exception.AppException;
 import com.masterspring.backenddayoff.repository.LeaveRemainRepository;
 import com.masterspring.backenddayoff.repository.UserRepository;
 import com.masterspring.backenddayoff.service.AuthService;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final LeaveRemainRepository leaveRemainRepository;
@@ -33,11 +33,11 @@ public class AuthServiceImpl implements AuthService {
         authResponse.setEmail(user.getEmail());
         authResponse.setAddress(user.getAddress());
         authResponse.setDepartment(user.getDepartment());
-        authResponse.setBirthDate(user.getBirthDate());
+        authResponse.setBirthdate(user.getBirthdate());
         authResponse.setWorkDate(user.getWorkDate());
         authResponse.setPhone(user.getPhone());
         authResponse.setFullName(user.getFullName());
-        authResponse.setRole(user.getRole().name().toLowerCase());
+        authResponse.setRole(user.getRole());
         authResponse.setId(user.getId());
         authResponse.setRemainDays(user.getLeaveRemain().getRemainDays());
 

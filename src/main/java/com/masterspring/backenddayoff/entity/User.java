@@ -6,40 +6,36 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Builder
-@AllArgsConstructor
 @Entity
 @Table(name = "`users`")
 public class User {
-
-    public enum Role {
-        MANAGER, ADMIN, USER
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "`id`")
     private Long id;
 
-    @Column(name = "`email`", unique = true)
+    @Column(name = "`email`", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "`password`")
+    @Column(name = "`password`", nullable = false)
     private String password;
 
     @Column(name = "`full_name`")
     private String fullName;
 
-    @Column(name = "`birth_date`")
-    private LocalDateTime birthDate;
+    @Column(name = "`birthdate`")
+    private LocalDate birthdate;
 
     @Column(name = "`work_date`")
-    private LocalDateTime workDate;
+    private LocalDate workDate;
 
     @Column(name = "`address`")
     private String address;
@@ -47,12 +43,16 @@ public class User {
     @Column(name = "`phone`")
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "`role`")
-    private Role role;
+    /**
+     * 0 - Manager
+     * 1 - Admin
+     * 2 - User
+     */
+    @Column(name = "`role`", nullable = false)
+    private Integer role;
 
     @ManyToOne
-    @JoinColumn(name = "`department_id`")
+    @JoinColumn(name = "`department_id`", nullable = false)
     private Department department;
 
     @OneToMany(mappedBy = "user")

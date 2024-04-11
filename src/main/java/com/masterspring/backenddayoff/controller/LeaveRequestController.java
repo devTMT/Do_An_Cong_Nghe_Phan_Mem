@@ -8,26 +8,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/leave_request/")
+@RequestMapping("/api/v1/leave_request")
 public class LeaveRequestController {
-    private LeaveRequestService leaveRequestService;
+    private final LeaveRequestService leaveRequestService;
 
     @Autowired
     public LeaveRequestController(LeaveRequestService leaveRequestService) {
         this.leaveRequestService = leaveRequestService;
     }
 
-    @PutMapping("update_status/{id}")
+    @PutMapping("/update_status/{id}")
     public ResponseEntity<LeaveRequestStatusDto> updateStatus(
             @PathVariable("id") long id,
             @RequestBody LeaveRequestStatusDto leaveRequestDto) {
         return ResponseEntity.ok(leaveRequestService.confirmLeaveRequest(id, leaveRequestDto));
     }
 
-    @GetMapping("pagination_manager")
+    @GetMapping("/pagination_manager")
     public ResponseEntity<LeaveRequestPaginationResponse> getLeaveRequestsWithManagerId(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize){
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize) {
         return ResponseEntity.ok(leaveRequestService.getPageLeaveRequestsWithManagerId(pageNo, pageSize));
     }
 }

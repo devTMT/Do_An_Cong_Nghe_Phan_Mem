@@ -1,11 +1,11 @@
 package com.masterspring.backenddayoff.dto.response;
 
-import com.masterspring.backenddayoff.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,13 +15,17 @@ import java.time.LocalDateTime;
 public class LeaveRequestResponse {
     private Long id;
 
-    private LocalDateTime date;
+    private LocalDate startDate;
+
+    private LocalDate endDate;
 
     private String reason;
 
     private Integer status;
 
     private LocalDateTime createdAt;
+
     private String username;
+
     private String manager;
 }

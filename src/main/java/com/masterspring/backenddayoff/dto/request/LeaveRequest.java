@@ -3,13 +3,15 @@ package com.masterspring.backenddayoff.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 public class LeaveRequest {
     private Long userId;
-    private List<LocalDateTime> dates;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalDateTime createdAt;
     private String reason;
 }

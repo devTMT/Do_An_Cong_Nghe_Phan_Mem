@@ -12,35 +12,30 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class LeaveRequestServiceImpl implements LeaveRequestService {
-    private LeaveRequestRepository leaveRequestRepository;
+    private final LeaveRequestRepository leaveRequestRepository;
 
     @Autowired
     public LeaveRequestServiceImpl(LeaveRequestRepository leaveRequestRepository) {
         this.leaveRequestRepository = leaveRequestRepository;
     }
 
-
     @Override
     public LeaveRequestStatusDto confirmLeaveRequest(Long id, LeaveRequestStatusDto leaveRequestDto) {
         LeaveRequest leaveRequest = leaveRequestRepository.findById(id).orElseThrow(()
                 -> new AppException(500, "could not found"));
-        updateStatus(leaveRequest, leaveRequestDto);
+        leaveRequest.setStatus(leaveRequestDto.getStatus());
         leaveRequestRepository.save(leaveRequest);
         LeaveRequestStatusDto response = new LeaveRequestStatusDto();
         response.setId(leaveRequest.getId());
-        if(leaveRequest.getStatus() == 1){
-            response.setStatus("accept");
-        }else if(leaveRequest.getStatus() == 0){
-            response.setStatus("reject");
-        }else{
-            response.setStatus("waiting");
-        }
+        response.setStatus(leaveRequest.getStatus());
         response.setManager_id(leaveRequest.getUser().getId());
         return response;
     }
@@ -49,8 +44,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     public LeaveRequestPaginationResponse getPageLeaveRequestsWithManagerId(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<LeaveRequest> leaveRequestPage = leaveRequestRepository.findAll(pageable);
-        List<LeaveRequestResponse> content = leaveRequestPage.getContent().stream().map(leaveRequest ->
-            mapToResponse(leaveRequest)).collect(Collectors.toList());
+        List<LeaveRequestResponse> content = leaveRequestPage.getContent().stream().map(this::mapToResponse).collect(Collectors.toList());
         LeaveRequestPaginationResponse response = new LeaveRequestPaginationResponse();
         response.setContent(content);
         response.setPageNo(leaveRequestPage.getNumber());
@@ -60,35 +54,28 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         return response;
     }
 
-    public void updateStatus(LeaveRequest leaveRequest, LeaveRequestStatusDto leaveRequestDto){
-        if(leaveRequestDto.getStatus().equals("reject")){
-            leaveRequest.setStatus(0);
-        }else if(leaveRequestDto.getStatus().equals("accept")){
-            leaveRequest.setStatus(1);
-        }else{
-            leaveRequest.setStatus(2);
-        }
-    }
-
-    public LeaveRequestResponse mapToResponse(LeaveRequest leaveRequest){
+    public LeaveRequestResponse mapToResponse(LeaveRequest leaveRequest) {
         LeaveRequestResponse leaveRequestResponse = new LeaveRequestResponse();
         leaveRequestResponse.setId(leaveRequest.getId());
-        leaveRequestResponse.setDate(leaveRequest.getDate());
+        leaveRequestResponse.setStartDate(leaveRequest.getStartDate());
+        leaveRequestResponse.setEndDate(leaveRequest.getEndDate());
         leaveRequestResponse.setReason(leaveRequest.getReason());
         leaveRequestResponse.setStatus(leaveRequest.getStatus());
         leaveRequestResponse.setCreatedAt(leaveRequest.getCreatedAt());
         leaveRequestResponse.setUsername(leaveRequest.getUser().getFullName());
-        if(leaveRequest.getUser().getManager() == null){
+        if (leaveRequest.getUser().getManager() == null) {
             leaveRequestResponse.setManager("I am manager");
-        }else{
+        } else {
             leaveRequestResponse.setManager(leaveRequest.getUser().getManager().getFullName());
         }
         return leaveRequestResponse;
     }
-    public LeaveRequest mapToEntity(LeaveRequestResponse leaveRequestResponse){
+
+    public LeaveRequest mapToEntity(LeaveRequestResponse leaveRequestResponse) {
         LeaveRequest leaveRequest = LeaveRequest.builder()
                 .id(leaveRequestResponse.getId())
-                .date(leaveRequestResponse.getDate())
+                .startDate(leaveRequestResponse.getStartDate())
+                .endDate(leaveRequestResponse.getEndDate())
                 .reason(leaveRequestResponse.getReason())
                 .status(leaveRequestResponse.getStatus())
                 .createdAt(leaveRequestResponse.getCreatedAt())

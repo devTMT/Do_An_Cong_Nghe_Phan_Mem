@@ -19,11 +19,8 @@ public class LeaveRequest {
     @Column(name = "`id`")
     private Long id;
 
-    @Column(name = "`start_date`")
-    private LocalDateTime startDate;
-
-    @Column(name = "`end_date`")
-    private LocalDateTime endDate;
+    @Column(name = "`date`")
+    private LocalDateTime date;
 
     @Column(name = "`reason`")
     private String reason;

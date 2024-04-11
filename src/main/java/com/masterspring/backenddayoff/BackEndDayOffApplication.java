@@ -76,8 +76,9 @@ public class BackEndDayOffApplication {
                     for (int j = 0; j < 2; j++) {
                         var leaveRequest = new LeaveRequest();
                         leaveRequest.setUser(user);
-                        leaveRequest.setStartDate(LocalDateTime.of(2024, 4, 7, 0, 0));
-                        leaveRequest.setEndDate(LocalDateTime.of(2024, 4, 8, 23, 59));
+                        leaveRequest.setDate(LocalDateTime.of(2024, 4, 7, 0, 0));
+//                        leaveRequest.setStartDate(LocalDateTime.of(2024, 4, 7, 0, 0));
+//                        leaveRequest.setEndDate(LocalDateTime.of(2024, 4, 8, 23, 59));
                         leaveRequest.setReason("Sick");
                         leaveRequest.setCreatedAt(LocalDateTime.now());
                         leaveRequest.setStatus(0);

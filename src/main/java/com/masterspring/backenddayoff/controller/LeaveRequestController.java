@@ -24,10 +24,18 @@ public class LeaveRequestController {
         return ResponseEntity.ok(leaveRequestService.confirmLeaveRequest(id, leaveRequestDto));
     }
 
-    @GetMapping("/pagination_manager")
-    public ResponseEntity<LeaveRequestPaginationResponse> getLeaveRequestsWithManagerId(
+    @GetMapping("/pagination")
+    public ResponseEntity<LeaveRequestPaginationResponse> getLeaveRequestsPage(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize) {
-        return ResponseEntity.ok(leaveRequestService.getPageLeaveRequestsWithManagerId(pageNo, pageSize));
+        return ResponseEntity.ok(leaveRequestService.getPageLeaveRequests(pageNo, pageSize));
+    }
+
+    @GetMapping("/pagination_by_userid/{id}")
+    public ResponseEntity<LeaveRequestPaginationResponse> getLeaveRequestsPageWithUserId(
+            @PathVariable("id") long userId,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize) {
+        return ResponseEntity.ok(leaveRequestService.getPageLeaveRequestsWithUserId(userId, pageNo, pageSize));
     }
 }

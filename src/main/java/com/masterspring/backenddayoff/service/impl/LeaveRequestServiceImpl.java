@@ -41,9 +41,23 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     }
 
     @Override
-    public LeaveRequestPaginationResponse getPageLeaveRequestsWithManagerId(int pageNo, int pageSize) {
+    public LeaveRequestPaginationResponse getPageLeaveRequests(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<LeaveRequest> leaveRequestPage = leaveRequestRepository.findAll(pageable);
+        List<LeaveRequestResponse> content = leaveRequestPage.getContent().stream().map(this::mapToResponse).collect(Collectors.toList());
+        LeaveRequestPaginationResponse response = new LeaveRequestPaginationResponse();
+        response.setContent(content);
+        response.setPageNo(leaveRequestPage.getNumber());
+        response.setPageSize(leaveRequestPage.getSize());
+        response.setTotalElements(leaveRequestPage.getTotalElements());
+        response.setTotalPages(leaveRequestPage.getTotalPages());
+        return response;
+    }
+
+    @Override
+    public LeaveRequestPaginationResponse getPageLeaveRequestsWithUserId(Long userId, Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<LeaveRequest> leaveRequestPage = leaveRequestRepository.findAllById(userId, pageable);
         List<LeaveRequestResponse> content = leaveRequestPage.getContent().stream().map(this::mapToResponse).collect(Collectors.toList());
         LeaveRequestPaginationResponse response = new LeaveRequestPaginationResponse();
         response.setContent(content);

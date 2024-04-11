@@ -1,7 +1,11 @@
 package com.masterspring.backenddayoff.service;
 
-import com.masterspring.backenddayoff.dto.LeaveRequestDto;
+import com.masterspring.backenddayoff.dto.LeaveRequestStatusDto;
+import com.masterspring.backenddayoff.dto.response.LeaveRequestPaginationResponse;
+import com.masterspring.backenddayoff.entity.LeaveRequest;
+import org.springframework.data.domain.Page;
 
 public interface LeaveRequestService {
-    public LeaveRequestDto confirmLeaveRequest(Long id, LeaveRequestDto leaveRequestDto);
+    LeaveRequestStatusDto confirmLeaveRequest(Long id, LeaveRequestStatusDto leaveRequestDto);
+    LeaveRequestPaginationResponse getPageLeaveRequestsWithManagerId(int pageNo, int pageSize);
 }

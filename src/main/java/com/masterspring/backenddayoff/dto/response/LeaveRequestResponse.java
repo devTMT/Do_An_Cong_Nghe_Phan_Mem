@@ -1,29 +1,27 @@
 package com.masterspring.backenddayoff.dto.response;
 
 import com.masterspring.backenddayoff.entity.User;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class LeaveResponse {
+public class LeaveRequestResponse {
     private Long id;
 
-    private LocalDateTime startDate;
-
-    private LocalDateTime endDate;
+    private LocalDateTime date;
 
     private String reason;
 
     private Integer status;
 
     private LocalDateTime createdAt;
-
-    private User user;
+    private String username;
+    private String manager;
 }

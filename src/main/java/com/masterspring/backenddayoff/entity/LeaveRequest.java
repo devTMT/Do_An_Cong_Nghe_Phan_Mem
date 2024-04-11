@@ -1,9 +1,7 @@
 package com.masterspring.backenddayoff.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,15 +10,15 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "leave_request")
+@Builder
+@AllArgsConstructor
 public class LeaveRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime startDate;
-
-    private LocalDateTime endDate;
+    private LocalDateTime date;
 
     private String reason;
 
@@ -28,6 +26,6 @@ public class LeaveRequest {
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 }

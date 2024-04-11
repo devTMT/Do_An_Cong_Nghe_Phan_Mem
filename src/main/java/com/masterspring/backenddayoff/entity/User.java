@@ -14,29 +14,45 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "`users`")
 public class User {
+
+    public enum Role {
+        MANAGER, ADMIN, USER
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "`id`")
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "`email`", unique = true)
     private String email;
 
+    @Column(name = "`password`")
     private String password;
 
+    @Column(name = "`full_name`")
     private String fullName;
 
+    @Column(name = "`birth_date`")
     private LocalDateTime birthDate;
 
+    @Column(name = "`work_date`")
     private LocalDateTime workDate;
 
+    @Column(name = "`address`")
     private String address;
 
-    private Integer role;
+    @Column(name = "`phone`")
+    private String phone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "`role`")
+    private Role role;
 
     @ManyToOne
+    @JoinColumn(name = "`department_id`")
     private Department department;
 
     @OneToMany(mappedBy = "user")
@@ -46,6 +62,7 @@ public class User {
     private LeaveRemain leaveRemain;
 
     @ManyToOne
+    @JoinColumn(name = "`manager_id`")
     private User manager;
 
     public void setLeaveRemain(LeaveRemain leaveRemain) {

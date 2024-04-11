@@ -1,8 +1,8 @@
 package com.masterspring.backenddayoff.service;
 
 import com.masterspring.backenddayoff.dto.request.AuthRequest;
-import com.masterspring.backenddayoff.entity.User;
+import com.masterspring.backenddayoff.dto.response.AuthResponse;
 
 public interface AuthService {
-    User login(AuthRequest authRequest);
+    AuthResponse login(AuthRequest authRequest);
 }

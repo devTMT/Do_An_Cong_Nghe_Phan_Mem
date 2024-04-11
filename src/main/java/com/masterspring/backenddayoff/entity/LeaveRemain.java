@@ -9,15 +9,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "leave_remains")
+@Table(name = "`leave_remains`")
 public class LeaveRemain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "`id`")
     private Long id;
 
+    @Column(name = "`remain_days`")
     private Integer remainDays;
 
+    @Column(name = "`year`")
     private Integer year;
 
     @OneToOne

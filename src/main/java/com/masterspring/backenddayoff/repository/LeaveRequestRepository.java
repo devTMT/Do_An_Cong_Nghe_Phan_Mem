@@ -1,5 +1,6 @@
 package com.masterspring.backenddayoff.repository;
 
+import com.masterspring.backenddayoff.dto.response.LeaveRequestResponse;
 import com.masterspring.backenddayoff.entity.LeaveRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,5 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long> {
-
+    public Page<LeaveRequest> findAllById(Long userId, Pageable pageable);
+    public Page<LeaveRequest> findAllByUserFullNameContainingIgnoreCaseOrReasonContainingIgnoreCase(String fullNameKeyword, String ReasonKeyword, Pageable pageable);
 }

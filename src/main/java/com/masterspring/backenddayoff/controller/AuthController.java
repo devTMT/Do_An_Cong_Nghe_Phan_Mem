@@ -4,25 +4,26 @@ import com.masterspring.backenddayoff.dto.request.AuthRequest;
 import com.masterspring.backenddayoff.dto.response.AuthResponse;
 import com.masterspring.backenddayoff.service.AuthService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/api/v1/auth")
+@RestController
+@RequestMapping("/api/v1")
 public class AuthController {
+
     private final AuthService authService;
 
-    public AuthController( AuthService authService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest) {
-        var authResponse = authService.login(authRequest);
-        return new ResponseEntity<>(authResponse, HttpStatus.OK);
+        return ResponseEntity.ok(authService.login(authRequest));
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<AuthResponse> getUserInfo(@PathVariable Long userId) {
+        return ResponseEntity.ok(authService.getUserInfo(userId));
     }
 }

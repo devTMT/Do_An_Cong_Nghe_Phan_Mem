@@ -3,11 +3,10 @@ package com.masterspring.backenddayoff.service.impl;
 import com.masterspring.backenddayoff.dto.request.AuthRequest;
 import com.masterspring.backenddayoff.dto.response.AuthResponse;
 import com.masterspring.backenddayoff.entity.LeaveRemain;
-import com.masterspring.backenddayoff.exception.AppException;
+import com.masterspring.backenddayoff.mapper.AuthResponseMapper;
 import com.masterspring.backenddayoff.repository.LeaveRemainRepository;
 import com.masterspring.backenddayoff.repository.UserRepository;
 import com.masterspring.backenddayoff.service.AuthService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,34 +17,36 @@ import java.time.LocalDateTime;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final LeaveRemainRepository leaveRemainRepository;
+    private final AuthResponseMapper authResponseMapper;
 
-    public AuthServiceImpl(UserRepository userRepository, LeaveRemainRepository leaveRemainRepository) {
+    public AuthServiceImpl(UserRepository userRepository, LeaveRemainRepository leaveRemainRepository, AuthResponseMapper authResponseMapper) {
         this.userRepository = userRepository;
         this.leaveRemainRepository = leaveRemainRepository;
+        this.authResponseMapper = authResponseMapper;
     }
 
     @Override
     public AuthResponse login(AuthRequest authRequest) {
+        // Find user by email and password.
         var user = userRepository.findByEmailAndPassword(authRequest.getEmail(), authRequest.getPassword());
-        if (user == null) throw new AppException(HttpStatus.BAD_REQUEST.value(), "Invalid email or password");
-        var authResponse = new AuthResponse();
-        // Implement mapper
-        authResponse.setEmail(user.getEmail());
-        authResponse.setAddress(user.getAddress());
-        authResponse.setDepartment(user.getDepartment());
-        authResponse.setBirthdate(user.getBirthdate());
-        authResponse.setWorkDate(user.getWorkDate());
-        authResponse.setPhone(user.getPhone());
-        authResponse.setFullName(user.getFullName());
-        authResponse.setRole(user.getRole());
-        authResponse.setId(user.getId());
-        authResponse.setRemainDays(user.getLeaveRemain().getRemainDays());
 
+        // User is null then throw error.
+        if (user == null) throw new RuntimeException("Invalid email or password");
+
+        // Create AuthResponse mapped from user.
+        var authResponse = authResponseMapper.fromUser(user);
+
+        // Check remain days.
         checkRemainDays(user.getLeaveRemain());
 
         return authResponse;
     }
 
+    /**
+     * This method check whether if this is the next year, then update the {@code LeaveRemain} table.
+     *
+     * @param leaveRemain the previous LeaveRemain.
+     */
     private void checkRemainDays(LeaveRemain leaveRemain) {
         if (LocalDateTime.now().getYear() > leaveRemain.getYear()) {
             leaveRemainRepository.findById(leaveRemain.getId()).ifPresent(remain -> {
@@ -53,5 +54,12 @@ public class AuthServiceImpl implements AuthService {
                 remain.setRemainDays(remain.getRemainDays() + 1);
             });
         }
+    }
+
+    @Override
+    public AuthResponse getUserInfo(Long userId) {
+        var user = userRepository.findById(userId);
+        if (user.isEmpty()) throw new RuntimeException("User not found.");
+        return authResponseMapper.fromUser(user.get());
     }
 }

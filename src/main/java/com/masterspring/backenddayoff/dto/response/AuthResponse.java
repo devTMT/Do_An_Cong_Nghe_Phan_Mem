@@ -1,12 +1,10 @@
 package com.masterspring.backenddayoff.dto.response;
 
 import com.masterspring.backenddayoff.entity.Department;
-import com.masterspring.backenddayoff.entity.User;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 public class AuthResponse {

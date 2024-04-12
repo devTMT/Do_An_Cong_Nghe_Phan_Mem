@@ -2,46 +2,38 @@ package com.masterspring.backenddayoff.service.impl;
 
 import com.masterspring.backenddayoff.dto.LeaveRequestStatusDto;
 import com.masterspring.backenddayoff.dto.request.LeaveRequestPost;
-import com.masterspring.backenddayoff.dto.response.LeaveRequestHistoryResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestPaginationResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestPostResponse;
 import com.masterspring.backenddayoff.dto.response.LeaveRequestResponse;
 import com.masterspring.backenddayoff.entity.LeaveRequest;
 import com.masterspring.backenddayoff.exception.AppException;
-import com.masterspring.backenddayoff.mapper.LeaveRequestHistoryMapper;
 import com.masterspring.backenddayoff.mapper.LeaveRequestPostMapper;
 import com.masterspring.backenddayoff.repository.LeaveRemainRepository;
 import com.masterspring.backenddayoff.repository.LeaveRequestRepository;
 import com.masterspring.backenddayoff.repository.UserRepository;
 import com.masterspring.backenddayoff.service.LeaveRequestService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class LeaveRequestServiceImpl implements LeaveRequestService {
     private final LeaveRequestRepository leaveRequestRepository;
     private final UserRepository userRepository;
     private final LeaveRequestPostMapper leaveRequestPostMapper;
     private final LeaveRemainRepository leaveRemainRepository;
-    private final LeaveRequestHistoryMapper leaveRequestHistoryMapper;
 
-    @Autowired
     public LeaveRequestServiceImpl(LeaveRequestRepository leaveRequestRepository, UserRepository userRepository, LeaveRequestPostMapper leaveRequestPostMapper,
-                                   LeaveRemainRepository leaveRemainRepository, LeaveRequestHistoryMapper leaveRequestHistoryMapper) {
+                                   LeaveRemainRepository leaveRemainRepository) {
         this.leaveRequestRepository = leaveRequestRepository;
         this.userRepository = userRepository;
         this.leaveRequestPostMapper = leaveRequestPostMapper;
         this.leaveRemainRepository = leaveRemainRepository;
-        this.leaveRequestHistoryMapper = leaveRequestHistoryMapper;
     }
 
     @Override
@@ -76,25 +68,14 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     }
 
     @Override
-    public LeaveRequestHistoryResponse getLeaveRequestHistory(Long userId) {
-        // If user not exist then throw error.
-        var user = userRepository.findById(userId);
-        if (user.isEmpty()) throw new AppException(400, "User not found.");
-
-        // Fetch all leave requests and map to response.
-        var leaveRequests = leaveRequestRepository.findByUserId(userId);
-        var leaveRequestHistoryResponse = new LeaveRequestHistoryResponse();
-        leaveRequestHistoryResponse.setUserId(userId);
-        leaveRequestHistoryResponse.setLeaveRequests(leaveRequests.stream().map(leaveRequestHistoryMapper::fromleaveRequest).toList());
-
-        return leaveRequestHistoryResponse;
-    }
-
-    @Override
     public LeaveRequestStatusDto confirmLeaveRequest(Long id, LeaveRequestStatusDto leaveRequestDto) {
         LeaveRequest leaveRequest = leaveRequestRepository.findById(id).orElseThrow(()
                 -> new AppException(500, "could not found"));
-        leaveRequest.setStatus(leaveRequestDto.getStatus());
+        if (leaveRequestDto.getStatus() == 0 || leaveRequestDto.getStatus() == 1) {
+            leaveRequest.setStatus(leaveRequestDto.getStatus());
+        } else {
+            leaveRequest.setStatus(2);
+        }
         leaveRequestRepository.save(leaveRequest);
         LeaveRequestStatusDto response = new LeaveRequestStatusDto();
         response.setId(leaveRequest.getId());
@@ -121,7 +102,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     @Override
     public LeaveRequestPaginationResponse getPageLeaveRequestsWithUserId(Long userId, Integer pageNo, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<LeaveRequest> leaveRequestPage = leaveRequestRepository.findAllById(userId, pageable);
+        Page<LeaveRequest> leaveRequestPage = leaveRequestRepository.findByUserId(userId, pageable);
         List<LeaveRequestResponse> content = leaveRequestPage.getContent().stream().map(this::mapToResponse).collect(Collectors.toList());
         LeaveRequestPaginationResponse response = new LeaveRequestPaginationResponse();
         response.setContent(content);

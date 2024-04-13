@@ -84,6 +84,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         response.setStatus(leaveRequest.getStatus());
         response.setManager_id(leaveRequest.getUser().getId());
         return response;
+
     }
 
     @Override
@@ -92,7 +93,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         Page<LeaveRequest> leaveRequestPage = leaveRequestRepository.findAll(pageable);
         List<LeaveRequestResponse> content = leaveRequestPage.getContent().stream().map(this::mapToResponse).collect(Collectors.toList());
         LeaveRequestPaginationResponse response = new LeaveRequestPaginationResponse();
-        response.setContent(content);
+        response.setContent(content.reversed());
         response.setPageNo(leaveRequestPage.getNumber());
         response.setPageSize(leaveRequestPage.getSize());
         response.setTotalElements(leaveRequestPage.getTotalElements());
